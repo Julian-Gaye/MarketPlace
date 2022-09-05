@@ -27,14 +27,14 @@ contract MarketPlace {
       emit ListProduits(produits);
   }
 
-  function achat(address _vendeur, address _acheteur, uint _prix, uint id) public payable {
+  function achat(address _vendeur, address _acheteur, uint _prix, uint _id) public payable {
     require(balances[_acheteur] >= _prix, "L'acheteur n'a pas assez d'argent");
-    require(id <= produits.length, "Le produit n'existe pas");
-    require(produits[id].etat == State.ProduitDisponible, "Le produit n'est pas disponible");
+    require(_id <= produits.length, "Le produit n'existe pas");
+    require(produits[_id].etat == State.ProduitDisponible, "Le produit n'est pas disponible");
     balances[_vendeur] += _prix;
     balances[_acheteur] -= _prix;
-    produits[id].etat = State.ArticleCommande;
-    emit ProduitsAchetes(acheteur, vendeur, _prix, id);
+    produits[_id].etat = State.ArticleCommande;
+    emit ProduitsAchetes(_acheteur, _vendeur, _prix, _id);
   }
 
   function getSolde(address _acheteur) public view returns(uint) {

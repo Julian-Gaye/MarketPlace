@@ -10,17 +10,15 @@ contract MarketPlace {
 
   Produit[] produits;
   
-  address public acheteur;
-  address public vendeur;
-  mapping (address => uint) public balances;
+  address private acheteur;
+  address private vendeur;
+  mapping (address => uint) private balances;
 
   event ListProduits(Produit[] produit);
-  event ProduitsAchetes(address acheteur, address vendeur, uint prix);
+  event ProduitsAchetes(address acheteur, address vendeur, uint prix, uint id);
 
   enum State { ProduitDisponible, ArticleCommande }
 
-  // set the owner as th address that deployed the contract
-  // set the initial vending machine balance to 100
   constructor() {
       vendeur = msg.sender;
       produits.push(Produit(0, "Produit1", State.ProduitDisponible));
@@ -36,7 +34,7 @@ contract MarketPlace {
     balances[_vendeur] += _prix;
     balances[_acheteur] -= _prix;
     produits[id].etat = State.ArticleCommande;
-    emit ProduitsAchetes(acheteur, vendeur, _prix);
+    emit ProduitsAchetes(acheteur, vendeur, _prix, id);
   }
 
   function getSolde(address _acheteur) public view returns(uint) {
